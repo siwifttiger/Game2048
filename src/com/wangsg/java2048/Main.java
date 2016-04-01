@@ -9,12 +9,25 @@ public class Main {
 		}
 		game.printArray();
 		for(int i = 0; i < 5; ++ i){
+			game.pushUp();
+			game.printArray();
 			game.fillWithNewNum();
 			System.out.println("New Array");
 			game.printArray();
-			game.pushUp();
-			game.printArray();
 			game.pushDown();
+			game.printArray();
+			game.fillWithNewNum();
+			System.out.println("New Array");
+			game.printArray();
+			game.pushLeft();
+			game.printArray();
+			game.fillWithNewNum();
+			System.out.println("New Array");
+			game.printArray();
+			game.pushRight();
+			game.printArray();
+			game.fillWithNewNum();
+			System.out.println("New Array");
 			game.printArray();
 		}
 	}

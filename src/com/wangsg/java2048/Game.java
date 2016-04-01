@@ -50,6 +50,7 @@ public class Game {
 	//move up
 	public void pushUp(){
 		System.out.println("Pushing up...");
+		boolean [] combined = {false,false,false,false};
 		for(int y = 0; y < 4; ++y){
 			for(int x = 1; x < 4; ++x){
 				if(gameBoard[x][y] != 0){  //ignore 0
@@ -76,8 +77,15 @@ public class Game {
 					}
 					
 					else{
-						gameBoard[tempX][y] *= 2;
-						gameBoard[x][y] = 0;
+						if(combined[tempX] ){
+							gameBoard[tempX+1][y] = value;
+							gameBoard[x][y] = 0;							
+						}
+						else{
+							gameBoard[tempX][y] *= 2;
+							combined[tempX] = true;
+							gameBoard[x][y] = 0;
+						}
 					}
 				}
 			}
@@ -87,6 +95,7 @@ public class Game {
 	public void pushDown(){
 		//just like pushing up
 		System.out.println("Pushing down...");
+		boolean [] combined = {false,false,false,false};
 		for(int y = 0; y < 4; y++){
 			for(int x = 2; x >= 0;  x--){
 				if(gameBoard[x][y] != 0){
@@ -109,8 +118,59 @@ public class Game {
 						}
 					}
 					else{
-						gameBoard[tempX][y] *= 2;
+						if(combined[tempX] ){
+							gameBoard[tempX+1][y] = value;
+							gameBoard[x][y] = 0;
+						}
+						else{
+							gameBoard[tempX][y] *= 2;
+							gameBoard[x][y] = 0;
+							combined[tempX] = true;
+						}
+					}
+				}
+			}
+		}
+	}
+	//move left
+	public void pushLeft(){
+		System.out.println("Pushing Left...");
+		boolean [] combined = {false,false,false,false};
+		for(int x = 0; x < 4; ++x){
+			for(int y = 1; y < 4; ++y){
+				if(gameBoard[x][y] != 0){  //ignore 0
+					int value = gameBoard[x][y];
+					int tempY = y -1;
+					//ignore 0
+					while((tempY >= 0) && gameBoard[x][tempY] == 0){
+						tempY--;
+					}
+					//if the top is 0, swap
+					if(tempY == -1){
+						gameBoard[x][0] = value;
 						gameBoard[x][y] = 0;
+					}
+					
+					else if(gameBoard[x][tempY] != value){
+						if(gameBoard[x][tempY+1] != 0 && gameBoard[x][tempY] != 0){
+							gameBoard[x][tempY+1] = value;
+						}
+						else {
+							gameBoard[x][tempY+1] = value;
+							gameBoard[x][y] = 0;
+						}
+					}
+					
+					else{
+						if(combined[tempY] ){
+							gameBoard[x][tempY+1] = value;
+							gameBoard[x][y] = 0;						
+						}
+						else{
+							gameBoard[x][tempY] *= 2;
+							gameBoard[x][y] = 0;
+							combined[tempY] = true;
+						}
 					}
 				}
 			}
@@ -118,11 +178,47 @@ public class Game {
 	}
 	//move right
 	public void pushRight(){
-		
-	}
-	//move left
-	public void pushLeft(){
-		
+		System.out.println("Pushing Right...");
+		boolean [] combined = {false,false,false,false};
+		for(int x = 0; x < 4; ++x){
+			for(int y = 2; y >= 0; --y){
+				if(gameBoard[x][y] != 0){  //ignore 0
+					int value = gameBoard[x][y];
+					int tempY = y +1;
+					//ignore 0
+					while((tempY <=3) && gameBoard[x][tempY] == 0){
+						tempY++;
+					}
+					//if the top is 0, swap
+					if(tempY == 4){
+						gameBoard[x][3] = value;
+						gameBoard[x][y] = 0;
+					}
+					
+					else if(gameBoard[x][tempY] != value){
+						if(gameBoard[x][tempY-1] != 0 && gameBoard[x][tempY] != 0){
+							gameBoard[x][tempY-1] = value;
+						}
+						else {
+							gameBoard[x][tempY-1] = value;
+							gameBoard[x][y] = 0;
+						}
+					}
+					
+					else{
+						if(combined[tempY] ){
+							gameBoard[x][tempY-1] = value;
+							gameBoard[x][y] = 0;						
+						}
+						else{
+							gameBoard[x][tempY] *= 2;
+							gameBoard[x][y] = 0;
+							combined[tempY] = true;
+						}
+					}
+				}
+			}
+		}
 	}
 
 
