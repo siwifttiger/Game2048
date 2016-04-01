@@ -14,6 +14,8 @@ public class Main {
 			game.printArray();
 			game.pushUp();
 			game.printArray();
+			game.pushDown();
+			game.printArray();
 		}
 	}
 
