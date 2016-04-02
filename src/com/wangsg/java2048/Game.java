@@ -119,7 +119,7 @@ public class Game {
 					}
 					else{
 						if(combined[tempX] ){
-							gameBoard[tempX+1][y] = value;
+							gameBoard[tempX-1][y] = value;
 							gameBoard[x][y] = 0;
 						}
 						else{
