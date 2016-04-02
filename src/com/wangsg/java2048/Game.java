@@ -7,10 +7,16 @@ import java.util.Random;
 
 public class Game {
 	private int [][] gameBoard;
+	public int[][] getGameBoard() {
+		return gameBoard;
+	}
+
 	private Random r = new Random();
 	//constructor
 	public Game(){
 		gameBoard = new int[4][4];
+		fillWithNewNum();
+		fillWithNewNum();
 	}
 	
 	//just print the array

@@ -10,7 +10,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
-
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.net.URL;
 import java.util.Hashtable;
 
@@ -19,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
 
 
 public class GUI  extends JFrame{
@@ -30,7 +32,7 @@ public class GUI  extends JFrame{
 	private final int marginSize = 16;
 	private final Color backgroundColor =  new Color(225, 225, 120);
 	Hashtable numberTies;
-	
+	Game game;
 	GameBoard centerGB ;
 	JPanel northPanel;
 	JPanel westPanel;
@@ -45,18 +47,16 @@ public class GUI  extends JFrame{
 		protected void paintComponent(Graphics g){
 			g.setColor(new Color(20,20,20));
 			g.fillRect(0,0,this.getWidth(),this.getHeight());
-			int  [][] test = {
-					{0,1,2,3},
-					{4,5,6,7},
-					{8,9,10,11},
-					{0,0,0,0},
-			};
+			int  [][] board = game.getGameBoard();
+			game.printArray();
 			
 			for(int x = 1; x < 5; ++ x){
 				for(int y = 1;y < 5; ++ y){
 					int X = (8*x) + (64*(x-1));
 					int Y = (8*y) + (64*(y-1));
-					int thisNumber = test[y-1][x-1];
+					int thisNumber;
+					if(board[y-1][x-1] == 0) thisNumber = 0;
+					else  thisNumber = (int) (Math.log(board[y-1][x-1]) / Math.log(2));
 					
 					if(numberTies.containsKey(thisNumber)){
 						ImageIcon thisTile = (ImageIcon)numberTies.get(thisNumber);
@@ -66,9 +66,53 @@ public class GUI  extends JFrame{
 			}
 		}
 	}
-	
+	class FrameKeyActionListener implements KeyListener{
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode() == KeyEvent.VK_LEFT){
+				System.out.println("Left Key pressed...");
+				game.pushLeft();
+				game.fillWithNewNum();
+				centerGB.repaint();
+			}
+			if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+				System.out.println("Right Key pressed...");
+				game.pushRight();
+				game.fillWithNewNum();
+				centerGB.repaint();
+			}
+			if(e.getKeyCode() == KeyEvent.VK_UP){
+				System.out.println("Up Key pressed...");
+				game.pushUp();
+				game.fillWithNewNum();
+				centerGB.repaint();
+			}
+			if(e.getKeyCode() == KeyEvent.VK_DOWN){
+				System.out.println("Down Key pressed...");
+				game.pushDown();
+				game.fillWithNewNum();
+				centerGB.repaint();
+			}
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 	//constructor
 	public GUI(){
+		game = new Game();
 		loadNumberTiles();
 		northPanel = new JPanel();
 		northPanel.setLayout(new GridLayout());
@@ -104,6 +148,7 @@ public class GUI  extends JFrame{
         this.getContentPane().add(centerGB, BorderLayout.CENTER);
        this.getContentPane().setPreferredSize(new Dimension(width, height));
        this.pack();
+       this.addKeyListener(new FrameKeyActionListener());
        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        this.setVisible(true);
 	}
