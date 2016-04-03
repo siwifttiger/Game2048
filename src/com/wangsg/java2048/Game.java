@@ -27,6 +27,15 @@ public class Game {
 		System.out.println();
 	}
 	
+	public boolean fullFill(){
+		for(int x = 0; x < 4; ++x){
+			for(int y = 0; y < 4; ++ y){
+				if(gameBoard[x][y] == 0)
+					return false;
+			}
+		}
+		return true;
+	}
 	//random produce some numbers to fill the empty spaces
 	public void fillWithNewNum(){
 		ArrayList<Integer> emptySpacesX = new ArrayList<Integer>();
@@ -56,8 +65,9 @@ public class Game {
 	//move up
 	public void pushUp(){
 		System.out.println("Pushing up...");
-		boolean [] combined = {false,false,false,false};
+		
 		for(int y = 0; y < 4; ++y){
+			boolean [] combined = {false,false,false,false};
 			for(int x = 1; x < 4; ++x){
 				if(gameBoard[x][y] != 0){  //ignore 0
 					int value = gameBoard[x][y];
@@ -101,8 +111,9 @@ public class Game {
 	public void pushDown(){
 		//just like pushing up
 		System.out.println("Pushing down...");
-		boolean [] combined = {false,false,false,false};
+		
 		for(int y = 0; y < 4; y++){
+			boolean [] combined = {false,false,false,false};
 			for(int x = 2; x >= 0;  x--){
 				if(gameBoard[x][y] != 0){
 					int value = gameBoard[x][y];
@@ -141,8 +152,9 @@ public class Game {
 	//move left
 	public void pushLeft(){
 		System.out.println("Pushing Left...");
-		boolean [] combined = {false,false,false,false};
+		
 		for(int x = 0; x < 4; ++x){
+			boolean [] combined = {false,false,false,false};
 			for(int y = 1; y < 4; ++y){
 				if(gameBoard[x][y] != 0){  //ignore 0
 					int value = gameBoard[x][y];
@@ -185,8 +197,9 @@ public class Game {
 	//move right
 	public void pushRight(){
 		System.out.println("Pushing Right...");
-		boolean [] combined = {false,false,false,false};
+		
 		for(int x = 0; x < 4; ++x){
+			boolean [] combined = {false,false,false,false};
 			for(int y = 2; y >= 0; --y){
 				if(gameBoard[x][y] != 0){  //ignore 0
 					int value = gameBoard[x][y];

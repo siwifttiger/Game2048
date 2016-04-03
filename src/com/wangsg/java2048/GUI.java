@@ -81,24 +81,36 @@ public class GUI  extends JFrame{
 				game.pushLeft();
 				game.fillWithNewNum();
 				centerGB.repaint();
+				if(game.fullFill()){
+					System.exit(0);
+				}
 			}
 			if(e.getKeyCode() == KeyEvent.VK_RIGHT){
 				System.out.println("Right Key pressed...");
 				game.pushRight();
 				game.fillWithNewNum();
 				centerGB.repaint();
+				if(game.fullFill()){
+					System.exit(0);
+				}
 			}
 			if(e.getKeyCode() == KeyEvent.VK_UP){
 				System.out.println("Up Key pressed...");
 				game.pushUp();
 				game.fillWithNewNum();
 				centerGB.repaint();
+				if(game.fullFill()){
+					System.exit(0);
+				}
 			}
 			if(e.getKeyCode() == KeyEvent.VK_DOWN){
 				System.out.println("Down Key pressed...");
 				game.pushDown();
 				game.fillWithNewNum();
 				centerGB.repaint();
+				if(game.fullFill()){
+					System.exit(0);
+				}
 			}
 			
 		}
