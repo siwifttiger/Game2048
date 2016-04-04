@@ -23,7 +23,7 @@ import javax.swing.SwingConstants;
 
 
 
-public class GUI  extends JFrame{
+public class GUI {
 
 	//define
 	private final int height = 394; // frame height
@@ -31,9 +31,13 @@ public class GUI  extends JFrame{
 	private final int gameBoardSize = 296;
 	private final int marginSize = 16;
 	private final Color backgroundColor =  new Color(225, 225, 120);
+	JFrame frame;
 	Hashtable numberTies;
 	Game game;
 	GameBoard centerGB ;
+	WinBoard winBoard;
+	LoseBoard loseBoard;
+	GameState gs;
 	JPanel northPanel;
 	JPanel westPanel;
 	JPanel eastPanel;
@@ -42,6 +46,8 @@ public class GUI  extends JFrame{
 	JLabel scoreLabel;
 	JLabel highScoreLabel;
 	URL [] urlTiles;
+	Font smallFeedbackFont  = new Font("SansSerif",0,20);
+	Font largeFeedbackFont = new Font("SansSerif",0,40);
 	
 	class GameBoard extends JPanel{
 		protected void paintComponent(Graphics g){
@@ -66,6 +72,28 @@ public class GUI  extends JFrame{
 			}
 		}
 	}
+	class WinBoard extends JPanel{
+		protected void paintCompotnent(Graphics g){
+			g.setColor(new Color(20, 20, 20));
+			g.fillRect(0, 0, this.getWidth(), this.getHeight());
+			g.setFont(largeFeedbackFont);
+			g.drawString("You Win!", 20,10);
+			g.setFont(smallFeedbackFont);
+			g.drawString("Press Enter to play again", 20, 30);
+		}
+	}
+	
+	class LoseBoard extends JPanel{
+		protected void paintCompotnent(Graphics g){
+			g.setColor(new Color(20, 20, 20));
+			g.fillRect(0, 0, this.getWidth(), this.getHeight());
+			g.setFont(largeFeedbackFont);
+			g.drawString("You Lose!", 20,10);
+			g.setFont(smallFeedbackFont);
+			g.drawString("Press Enter to try  again", 20, 30);
+		}
+	}
+	
 	class FrameKeyActionListener implements KeyListener{
 
 		@Override
@@ -76,42 +104,44 @@ public class GUI  extends JFrame{
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode() == KeyEvent.VK_LEFT){
-				System.out.println("Left Key pressed...");
-				game.pushLeft();
-				game.fillWithNewNum();
-				centerGB.repaint();
-				if(game.fullFill()){
-					System.exit(0);
+			GameState gs = game.getState();
+			if(gs == GameState.CONTINUE){
+				if(e.getKeyCode() == KeyEvent.VK_LEFT){
+					System.out.println("Left Key pressed...");
+					game.pushLeft();
+					game.fillWithNewNum();
+					game.checkState();
+					centerGB.repaint();
+			
+				}
+				if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+					System.out.println("Right Key pressed...");
+					game.pushRight();
+					game.fillWithNewNum();
+					game.checkState();
+					centerGB.repaint();
+			
+				}
+				if(e.getKeyCode() == KeyEvent.VK_UP){
+					System.out.println("Up Key pressed...");
+					game.pushUp();
+					game.fillWithNewNum();
+					game.checkState();
+					centerGB.repaint();
+				
+				}
+				if(e.getKeyCode() == KeyEvent.VK_DOWN){
+					System.out.println("Down Key pressed...");
+					game.pushDown();
+					game.fillWithNewNum();
+					game.checkState();
+					centerGB.repaint();
 				}
 			}
-			if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-				System.out.println("Right Key pressed...");
-				game.pushRight();
-				game.fillWithNewNum();
-				centerGB.repaint();
-				if(game.fullFill()){
-					System.exit(0);
-				}
+			else if(gs == GameState.LOSE){
+				System.out.println("Lose...");
 			}
-			if(e.getKeyCode() == KeyEvent.VK_UP){
-				System.out.println("Up Key pressed...");
-				game.pushUp();
-				game.fillWithNewNum();
-				centerGB.repaint();
-				if(game.fullFill()){
-					System.exit(0);
-				}
-			}
-			if(e.getKeyCode() == KeyEvent.VK_DOWN){
-				System.out.println("Down Key pressed...");
-				game.pushDown();
-				game.fillWithNewNum();
-				centerGB.repaint();
-				if(game.fullFill()){
-					System.exit(0);
-				}
-			}
+		
 			
 		}
 
@@ -124,6 +154,7 @@ public class GUI  extends JFrame{
 	}
 	//constructor
 	public GUI(){
+		frame = new JFrame("2048");
 		game = new Game();
 		loadNumberTiles();
 		northPanel = new JPanel();
@@ -153,16 +184,19 @@ public class GUI  extends JFrame{
         southPanel.setBackground(backgroundColor);	
 
         centerGB = new GameBoard();
-        this.getContentPane().add(northPanel, BorderLayout.NORTH);
-        this.getContentPane().add(westPanel, BorderLayout.WEST);
-        this.getContentPane().add(eastPanel, BorderLayout.EAST);
-        this.getContentPane().add(southPanel, BorderLayout.SOUTH);
-        this.getContentPane().add(centerGB, BorderLayout.CENTER);
-       this.getContentPane().setPreferredSize(new Dimension(width, height));
-       this.pack();
-       this.addKeyListener(new FrameKeyActionListener());
-       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       this.setVisible(true);
+        winBoard = new WinBoard();
+        loseBoard = new LoseBoard();
+        frame.getContentPane().add(northPanel, BorderLayout.NORTH);
+        frame.getContentPane().add(westPanel, BorderLayout.WEST);
+        frame.getContentPane().add(eastPanel, BorderLayout.EAST);
+        frame.getContentPane().add(southPanel, BorderLayout.SOUTH);
+        frame.getContentPane().add(centerGB, BorderLayout.CENTER);
+       frame.getContentPane().setPreferredSize(new Dimension(width, height));
+       frame.pack();
+       frame.addKeyListener(new FrameKeyActionListener());
+  
+       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       frame.setVisible(true);
 	}
 	
 	private void loadNumberTiles(){

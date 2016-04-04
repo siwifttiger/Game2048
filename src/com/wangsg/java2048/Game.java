@@ -10,13 +10,18 @@ public class Game {
 	public int[][] getGameBoard() {
 		return gameBoard;
 	}
-
+	private GameState state;
 	private Random r = new Random();
 	//constructor
 	public Game(){
 		gameBoard = new int[4][4];
 		fillWithNewNum();
 		fillWithNewNum();
+		state = GameState.CONTINUE;
+	}
+	
+	public GameState getState(){
+		return state;
 	}
 	
 	//just print the array
@@ -27,17 +32,12 @@ public class Game {
 		System.out.println();
 	}
 	
-	public boolean fullFill(){
-		for(int x = 0; x < 4; ++x){
-			for(int y = 0; y < 4; ++ y){
-				if(gameBoard[x][y] == 0)
-					return false;
-			}
-		}
-		return true;
-	}
+
 	//random produce some numbers to fill the empty spaces
 	public void fillWithNewNum(){
+		if(checkForFull()){
+			return;
+		}
 		ArrayList<Integer> emptySpacesX = new ArrayList<Integer>();
 		ArrayList<Integer> emptySpacesY = new ArrayList<Integer>();
 		
@@ -238,6 +238,73 @@ public class Game {
 				}
 			}
 		}
+	}
+	
+	//add some functions to check 
+	public boolean checkFor2048(){
+		//success?
+		for(int x = 0; x < 4; ++ x){
+			for(int y = 0; y < 4; ++ y){
+				if(gameBoard[x][y] == 2048){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean checkForFull(){
+		//check if the gameBoard is full
+		for(int x = 0; x < 4; ++ x){
+			for(int y = 0; y < 4; ++ y){
+				if(gameBoard[x][y] == 0){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	public boolean checkHasMoves(){
+		//check if the gameBoard has moves next
+		for(int x = 0; x < 4; x++){
+			for(int y = 0; y < 4; y++){
+				if(x == 0){
+					if(y != 0){
+						if(gameBoard[x][y] == gameBoard[x][y-1]){
+							return true;
+						}
+					}
+				}else{
+					if(y != 0){
+						if(gameBoard[x][y] == gameBoard[x-1][y] || gameBoard[x][y] == gameBoard[x][y-1]){
+							return true;
+						}
+					}else if(y == 0){
+						if(gameBoard[x][y] == gameBoard[x-1][y]){
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public void checkState(){
+		if(checkFor2048()){
+			state = GameState.WIN;
+		}
+		else if(checkForFull()){
+			if(checkHasMoves()){
+				state = GameState.CONTINUE;
+			}
+			else{
+				state = GameState.LOSE;
+			}
+			
+		}
+		else state = GameState.CONTINUE;
 	}
 
 
